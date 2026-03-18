@@ -412,11 +412,38 @@ textarea {
   padding: 1rem;
 }
 
+.onboarding-form {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.onboarding-form .form-grid {
+  grid-template-columns: 1fr;
+}
+
+.onboarding-actions {
+  margin-top: 0.5rem;
+}
+
 .theme-picker,
 .toggle-row {
   display: flex;
   gap: 0.75rem;
   align-items: center;
+}
+
+.theme-picker--corner {
+  justify-content: flex-start;
+  margin-top: 16rem;
+}
+
+.theme-picker--corner .toggle-row {
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.theme-picker--corner .toggle-row span {
+  white-space: nowrap;
 }
 
 .toggle-row button.is-active {

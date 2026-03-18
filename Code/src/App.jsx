@@ -162,13 +162,16 @@ function MainView({ budgetApp }) {
 function OnboardingFlow({ budgetApp }) {
   const [formData, setFormData] = useState({
     name: '',
-    currency: 'USD',
-    monthlyBudget: '',
-    initialBalance: '',
-    initialSavings: '',
+    age: '',
+    email: '',
+    password: '',
     passkey: '',
-    goalName: 'Emergency Fund',
-    goalTarget: '',
+    currency: 'USD',
+    monthlyBudget: 0,
+    initialBalance: 0,
+    initialSavings: 0,
+    goalName: '',
+    goalTarget: 0,
     theme: 'light',
   })
 
@@ -187,68 +190,80 @@ function OnboardingFlow({ budgetApp }) {
       <section className="onboarding-panel">
         <div className="onboarding-copy">
           <p className="eyebrow">Smart Budget Tracker</p>
-          <h1>Set up your budget workspace.</h1>
+          <h1 className="welcome-text">Welcome</h1>
+          <h1>Set up your budget workspace</h1>
           <p>
-            We&apos;ll save your monthly budget, opening balances, savings goal, and passkey in localStorage so the app
-            behaves like your Java tracker from the first session.
+            We&apos;ll store your profile details and preferences locally so your dashboard is ready the next time you
+            open the app.
           </p>
           <ul className="feature-list">
-            <li>Monthly budget tracking instead of lifetime spend</li>
+            <li>Profile and security details saved in local storage</li>
             <li>Passkey confirmation for expenses and savings withdrawals</li>
-            <li>Persistent data, theme preference, and savings progress</li>
+            <li>Theme preference and data persisted between sessions</li>
           </ul>
+          
+          <div className="theme-picker theme-picker--corner">
+            <div>
+              <div className="toggle-row">
+                <span>Starting theme</span>
+                <button
+                  type="button"
+                  className={formData.theme === 'light' ? 'is-active' : ''}
+                  onClick={() => setFormData((prev) => ({ ...prev, theme: 'light' }))}
+                >
+                  Light
+                </button>
+                <button
+                  type="button"
+                  className={formData.theme === 'dark' ? 'is-active' : ''}
+                  onClick={() => setFormData((prev) => ({ ...prev, theme: 'dark' }))}
+                >
+                  Dark
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
 
         <form className="onboarding-form" onSubmit={handleSubmit}>
           <div className="form-grid">
             <label>
-              Your name
-              <input name="name" value={formData.name} onChange={handleChange} placeholder="Sokha" required />
+              Full name
+              <input name="name" value={formData.name} onChange={handleChange} placeholder="Jefferey Epstein" required />
             </label>
             <label>
-              Currency
-              <select name="currency" value={formData.currency} onChange={handleChange}>
-                <option value="USD">USD</option>
-                <option value="KHR">KHR</option>
-                <option value="EUR">EUR</option>
-              </select>
-            </label>
-            <label>
-              Monthly budget
+              Age
               <input
                 type="number"
-                min="0"
-                step="0.01"
-                name="monthlyBudget"
-                value={formData.monthlyBudget}
+                min="1"
+                name="age"
+                value={formData.age}
                 onChange={handleChange}
-                placeholder="800"
+                placeholder="21"
                 required
               />
             </label>
             <label>
-              Opening balance
+              Email
               <input
-                type="number"
-                min="0"
-                step="0.01"
-                name="initialBalance"
-                value={formData.initialBalance}
+                type="email"
+                name="email"
+                value={formData.email}
                 onChange={handleChange}
-                placeholder="2500"
+                placeholder="you@example.com"
                 required
               />
             </label>
             <label>
-              Opening savings
+              Password
               <input
-                type="number"
-                min="0"
-                step="0.01"
-                name="initialSavings"
-                value={formData.initialSavings}
+                type="password"
+                name="password"
+                value={formData.password}
                 onChange={handleChange}
-                placeholder="500"
+                placeholder="Create a password"
+                minLength={6}
+                required
               />
             </label>
             <label>
@@ -264,54 +279,16 @@ function OnboardingFlow({ budgetApp }) {
                 required
               />
             </label>
-            <label>
-              First savings goal
-              <input
-                name="goalName"
-                value={formData.goalName}
-                onChange={handleChange}
-                placeholder="Emergency Fund"
-              />
-            </label>
-            <label>
-              Goal target
-              <input
-                type="number"
-                min="0"
-                step="0.01"
-                name="goalTarget"
-                value={formData.goalTarget}
-                onChange={handleChange}
-                placeholder="1500"
-              />
-            </label>
-          </div>
-
-          <div className="theme-picker">
-            <span>Starting theme</span>
-            <div className="toggle-row">
-              <button
-                type="button"
-                className={formData.theme === 'light' ? 'is-active' : ''}
-                onClick={() => setFormData((prev) => ({ ...prev, theme: 'light' }))}
-              >
-                Light
-              </button>
-              <button
-                type="button"
-                className={formData.theme === 'dark' ? 'is-active' : ''}
-                onClick={() => setFormData((prev) => ({ ...prev, theme: 'dark' }))}
-              >
-                Dark
-              </button>
-            </div>
           </div>
 
           {budgetApp.onboardingFeedback ? <p className="form-feedback">{budgetApp.onboardingFeedback}</p> : null}
 
-          <Button className="primary-button" type="submit">
-            Launch budget dashboard
-          </Button>
+          <div className="onboarding-actions">
+            <Button className="primary-button" type="submit">
+              Launch budget dashboard
+            </Button>
+          </div>
+
         </form>
       </section>
     </div>

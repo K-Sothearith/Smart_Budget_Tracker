@@ -1,4 +1,4 @@
-function TransactionFilters({ filters, onFilterChange, onClearFilters, categories }) {
+function TransactionFilters({ filters, onFilterChange, categories }) {
   return (
     <div className="transaction-filters">
       <label>
@@ -30,9 +30,6 @@ function TransactionFilters({ filters, onFilterChange, onClearFilters, categorie
         Month
         <input type="month" value={filters.month} onChange={(event) => onFilterChange('month', event.target.value)} />
       </label>
-      <button type="button" className="secondary-button" onClick={onClearFilters}>
-        Clear
-      </button>
     </div>
   )
 }
