@@ -1,13 +1,15 @@
 import ProgressBar from '../../components/ui/ProgressBar'
 import Card from '../../components/ui/Card'
+import { formatCurrency } from '../../utils/currency'
 
-function BudgetCard({ spent = 0, budget = 0 }) {
+function BudgetCard({ summary, currency }) {
   return (
-    <Card className="budget-card">
-      <h3>Monthly Budget</h3>
-      <ProgressBar value={spent} max={budget || 1} />
+    <Card className="metric-card metric-card--budget">
+      <span className="metric-label">Monthly budget</span>
+      <strong>{formatCurrency(summary.monthlyBudget, currency)}</strong>
+      <ProgressBar value={summary.monthlyExpense} max={summary.monthlyBudget || 1} />
       <p>
-        Spent {spent} / {budget}
+        {formatCurrency(summary.monthlyExpense, currency)} spent in {summary.currentMonthLabel}
       </p>
     </Card>
   )

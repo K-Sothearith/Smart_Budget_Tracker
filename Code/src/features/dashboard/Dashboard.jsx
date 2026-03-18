@@ -3,20 +3,55 @@ import BudgetCard from './BudgetCard'
 import SavingsCard from './SavingsCard'
 import Charts from './Charts'
 import TransactionList from './TransactionList'
-import { useTransactions } from '../../hooks/useTransactions'
+import Card from '../../components/ui/Card'
+import Button from '../../components/ui/Button'
 
-function Dashboard() {
-  const { summary, transactions } = useTransactions()
-
+function Dashboard({
+  summary,
+  filters,
+  transactions,
+  categories,
+  onFilterChange,
+  onClearFilters,
+  onQuickAdd,
+  currency,
+  feedback,
+}) {
   return (
     <section className="dashboard">
+      <header className="section-header">
+        <div>
+          <p className="eyebrow">Overview</p>
+          <h1>Budget command center</h1>
+          <p>Track balance, this month&apos;s budget usage, savings transfers, and the latest records in one place.</p>
+        </div>
+        <Button className="primary-button" onClick={() => onQuickAdd('add')}>
+          Add transaction
+        </Button>
+      </header>
+
+      {feedback ? (
+        <Card className="feedback-card">
+          <p>{feedback}</p>
+        </Card>
+      ) : null}
+
       <div className="dashboard__cards">
-        <BalanceCard balance={summary.balance} />
-        <BudgetCard spent={summary.expense} budget={0} />
-        <SavingsCard saved={0} goal={0} />
+        <BalanceCard summary={summary} currency={currency} />
+        <BudgetCard summary={summary} currency={currency} />
+        <SavingsCard summary={summary} currency={currency} />
       </div>
-      <Charts />
-      <TransactionList transactions={transactions} />
+
+      <div className="content-grid">
+        <Charts summary={summary} currency={currency} />
+        <TransactionList
+          transactions={transactions.slice(0, 6)}
+          filters={filters}
+          onFilterChange={onFilterChange}
+          onClearFilters={onClearFilters}
+          categories={categories}
+        />
+      </div>
     </section>
   )
 }

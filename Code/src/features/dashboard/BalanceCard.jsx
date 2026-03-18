@@ -1,11 +1,14 @@
 import { formatCurrency } from '../../utils/currency'
 import Card from '../../components/ui/Card'
 
-function BalanceCard({ balance = 0 }) {
+function BalanceCard({ summary, currency }) {
   return (
-    <Card className="balance-card">
-      <h3>Balance</h3>
-      <p>{formatCurrency(balance)}</p>
+    <Card className="metric-card metric-card--balance">
+      <span className="metric-label">Available balance</span>
+      <strong>{formatCurrency(summary.balance, currency)}</strong>
+      <p>
+        Income {formatCurrency(summary.totalIncome, currency)} vs expenses {formatCurrency(summary.totalExpense, currency)}
+      </p>
     </Card>
   )
 }

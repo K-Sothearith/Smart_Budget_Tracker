@@ -1,15 +1,49 @@
-function Sidebar() {
+import { formatCurrency } from '../../utils/currency'
+
+const navItems = [
+  { id: 'overview', label: 'Overview' },
+  { id: 'add', label: 'Add Record' },
+  { id: 'transactions', label: 'Transactions' },
+  { id: 'savings', label: 'Savings' },
+  { id: 'settings', label: 'Settings' },
+]
+
+function Sidebar({ activeView, onChangeView, profile, theme, onToggleTheme, summary }) {
   return (
     <aside className="sidebar">
-      <h2>Smart Budget</h2>
-      <nav>
-        <ul>
-          <li>Home</li>
-          <li>Transactions</li>
-          <li>Add Entry</li>
-          <li>Settings</li>
-        </ul>
+      <div className="sidebar__brand">
+        <p className="eyebrow">Smart Budget</p>
+        <h2>{profile.name}&apos;s tracker</h2>
+        <p>Monthly control with savings transfers and passkey confirmation.</p>
+      </div>
+
+      <nav className="sidebar__nav">
+        {navItems.map((item) => (
+          <button
+            key={item.id}
+            type="button"
+            className={`sidebar__link ${activeView === item.id ? 'is-active' : ''}`}
+            onClick={() => onChangeView(item.id)}
+          >
+            {item.label}
+          </button>
+        ))}
       </nav>
+
+      <div className="sidebar__summary">
+        <div>
+          <span>Balance</span>
+          <strong>{formatCurrency(summary.balance, profile.currency)}</strong>
+        </div>
+        <div>
+          <span>Savings</span>
+          <strong>{formatCurrency(summary.savingsBalance, profile.currency)}</strong>
+        </div>
+      </div>
+
+      <button type="button" className="theme-switch" onClick={onToggleTheme}>
+        Switch to {theme === 'dark' ? 'light' : 'dark'} mode
+      </button>
     </aside>
   )
 }
