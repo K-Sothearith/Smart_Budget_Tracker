@@ -97,6 +97,7 @@ img {
 .primary-button,
 .secondary-button,
 .danger-button,
+.auth-link,
 .toggle-row button {
   border: 1px solid transparent;
   border-radius: 16px;
@@ -378,6 +379,7 @@ textarea {
 .primary-button:hover,
 .secondary-button:hover,
 .danger-button:hover,
+.auth-link:hover,
 .theme-switch:hover,
 .toggle-row button:hover {
   transform: translateY(-1px);
@@ -422,7 +424,19 @@ textarea {
 }
 
 .onboarding-actions {
+  display: grid;
+  gap: 0.85rem;
   margin-top: 0.5rem;
+}
+
+.auth-link {
+  padding: 0;
+  background: transparent;
+  color: var(--accent-strong);
+  border: none;
+  border-radius: 0;
+  text-align: left;
+  font-weight: 600;
 }
 
 .theme-picker,

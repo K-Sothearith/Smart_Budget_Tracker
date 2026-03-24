@@ -8,7 +8,7 @@ const navItems = [
   { id: 'settings', label: 'Settings' },
 ]
 
-function Sidebar({ activeView, onChangeView, profile, theme, onToggleTheme, summary }) {
+function Sidebar({ activeView, onChangeView, profile, theme, onToggleTheme, onSignOut, summary }) {
   return (
     <aside className="sidebar">
       <div className="sidebar__brand">
@@ -43,6 +43,9 @@ function Sidebar({ activeView, onChangeView, profile, theme, onToggleTheme, summ
 
       <button type="button" className="theme-switch" onClick={onToggleTheme}>
         Switch to {theme === 'dark' ? 'light' : 'dark'} mode
+      </button>
+      <button type="button" className="secondary-button" onClick={onSignOut}>
+        Sign out
       </button>
     </aside>
   )

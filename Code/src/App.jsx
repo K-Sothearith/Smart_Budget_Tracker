@@ -13,7 +13,15 @@ function App() {
   const budgetApp = useBudgetApp()
 
   if (!budgetApp.profile.isOnboarded) {
-    return <OnboardingFlow budgetApp={budgetApp} />
+    return <AuthGate budgetApp={budgetApp} initialMode="signup" />
+  }
+
+  if (!budgetApp.hasStoredCredentials) {
+    return <AccountSetupFlow budgetApp={budgetApp} />
+  }
+
+  if (!budgetApp.isAuthenticated) {
+    return <AuthGate budgetApp={budgetApp} initialMode="signin" />
   }
 
   return (
@@ -24,6 +32,7 @@ function App() {
         profile={budgetApp.profile}
         theme={budgetApp.theme}
         onToggleTheme={budgetApp.toggleTheme}
+        onSignOut={budgetApp.signOut}
         summary={budgetApp.summary}
       >
         <MainView budgetApp={budgetApp} />
@@ -159,7 +168,17 @@ function MainView({ budgetApp }) {
   )
 }
 
-function OnboardingFlow({ budgetApp }) {
+function AuthGate({ budgetApp, initialMode }) {
+  const [mode, setMode] = useState(initialMode)
+
+  return mode === 'signup' ? (
+    <OnboardingFlow budgetApp={budgetApp} onSwitchToSignIn={() => setMode('signin')} />
+  ) : (
+    <SignInFlow budgetApp={budgetApp} />
+  )
+}
+
+function OnboardingFlow({ budgetApp, onSwitchToSignIn }) {
   const [formData, setFormData] = useState({
     name: '',
     age: '',
@@ -172,7 +191,6 @@ function OnboardingFlow({ budgetApp }) {
     initialSavings: 0,
     goalName: '',
     goalTarget: 0,
-    theme: 'light',
   })
 
   const handleChange = (event) => {
@@ -182,11 +200,11 @@ function OnboardingFlow({ budgetApp }) {
 
   const handleSubmit = (event) => {
     event.preventDefault()
-    budgetApp.completeOnboarding(formData)
+    budgetApp.completeOnboarding({ ...formData, theme: budgetApp.theme })
   }
 
   return (
-    <div className={`onboarding-shell theme-${formData.theme}`}>
+    <div className={`onboarding-shell theme-${budgetApp.theme}`}>
       <section className="onboarding-panel">
         <div className="onboarding-copy">
           <p className="eyebrow">Smart Budget Tracker</p>
@@ -208,15 +226,15 @@ function OnboardingFlow({ budgetApp }) {
                 <span>Starting theme</span>
                 <button
                   type="button"
-                  className={formData.theme === 'light' ? 'is-active' : ''}
-                  onClick={() => setFormData((prev) => ({ ...prev, theme: 'light' }))}
+                  className={budgetApp.theme === 'light' ? 'is-active' : ''}
+                  onClick={() => budgetApp.theme !== 'light' && budgetApp.toggleTheme()}
                 >
                   Light
                 </button>
                 <button
                   type="button"
-                  className={formData.theme === 'dark' ? 'is-active' : ''}
-                  onClick={() => setFormData((prev) => ({ ...prev, theme: 'dark' }))}
+                  className={budgetApp.theme === 'dark' ? 'is-active' : ''}
+                  onClick={() => budgetApp.theme !== 'dark' && budgetApp.toggleTheme()}
                 >
                   Dark
                 </button>
@@ -287,8 +305,200 @@ function OnboardingFlow({ budgetApp }) {
             <Button className="primary-button" type="submit">
               Launch budget dashboard
             </Button>
+            <button type="button" className="auth-link" onClick={onSwitchToSignIn}>
+              Already Have an Account? SignIn
+            </button>
+          </div>
+        </form>
+      </section>
+    </div>
+  )
+}
+
+function SignInFlow({ budgetApp }) {
+  const [credentials, setCredentials] = useState({
+    email: '',
+    password: '',
+  })
+
+  const handleChange = (event) => {
+    const { name, value } = event.target
+    setCredentials((prev) => ({ ...prev, [name]: value }))
+  }
+
+  const handleSubmit = (event) => {
+    event.preventDefault()
+    budgetApp.signIn(credentials)
+  }
+
+  return (
+    <div className={`onboarding-shell theme-${budgetApp.theme}`}>
+      <section className="onboarding-panel">
+        <div className="onboarding-copy">
+          <p className="eyebrow">Smart Budget Tracker</p>
+          <h1>Welcome back</h1>
+          <p>
+            Sign in with the account stored on this device to open your saved budget dashboard with the same theme and
+            data.
+          </p>
+          <ul className="feature-list">
+            <li>Your budget data stays saved in local storage</li>
+            <li>You must sign in again whenever you return to the app</li>
+            <li>Theme changes here immediately match the dashboard</li>
+          </ul>
+
+          <div className="theme-picker theme-picker--corner">
+            <div>
+              <div className="toggle-row">
+                <span>Theme</span>
+                <button
+                  type="button"
+                  className={budgetApp.theme === 'light' ? 'is-active' : ''}
+                  onClick={() => budgetApp.theme !== 'light' && budgetApp.toggleTheme()}
+                >
+                  Light
+                </button>
+                <button
+                  type="button"
+                  className={budgetApp.theme === 'dark' ? 'is-active' : ''}
+                  onClick={() => budgetApp.theme !== 'dark' && budgetApp.toggleTheme()}
+                >
+                  Dark
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <form className="onboarding-form" onSubmit={handleSubmit}>
+          <div className="form-grid">
+            <label>
+              Email
+              <input
+                type="email"
+                name="email"
+                value={credentials.email}
+                onChange={handleChange}
+                placeholder="you@example.com"
+                required
+              />
+            </label>
+            <label>
+              Password
+              <input
+                type="password"
+                name="password"
+                value={credentials.password}
+                onChange={handleChange}
+                placeholder="Enter your password"
+                minLength={6}
+                required
+              />
+            </label>
           </div>
 
+          {budgetApp.authFeedback ? <p className="form-feedback">{budgetApp.authFeedback}</p> : null}
+
+          <div className="onboarding-actions">
+            <Button className="primary-button" type="submit">
+              Sign in
+            </Button>
+          </div>
+        </form>
+      </section>
+    </div>
+  )
+}
+
+function AccountSetupFlow({ budgetApp }) {
+  const [accountData, setAccountData] = useState({
+    email: '',
+    password: '',
+  })
+
+  const handleChange = (event) => {
+    const { name, value } = event.target
+    setAccountData((prev) => ({ ...prev, [name]: value }))
+  }
+
+  const handleSubmit = (event) => {
+    event.preventDefault()
+    budgetApp.completeAccountSetup(accountData)
+  }
+
+  return (
+    <div className={`onboarding-shell theme-${budgetApp.theme}`}>
+      <section className="onboarding-panel">
+        <div className="onboarding-copy">
+          <p className="eyebrow">Smart Budget Tracker</p>
+          <h1>Finish account setup</h1>
+          <p>
+            Your saved budget data is still here. Add login credentials once so future visits require sign-in before
+            opening the dashboard.
+          </p>
+          <ul className="feature-list">
+            <li>Existing transactions and goals stay untouched</li>
+            <li>This only adds account credentials to your saved profile</li>
+            <li>Theme changes here use the same dashboard styling</li>
+          </ul>
+
+          <div className="theme-picker theme-picker--corner">
+            <div>
+              <div className="toggle-row">
+                <span>Theme</span>
+                <button
+                  type="button"
+                  className={budgetApp.theme === 'light' ? 'is-active' : ''}
+                  onClick={() => budgetApp.theme !== 'light' && budgetApp.toggleTheme()}
+                >
+                  Light
+                </button>
+                <button
+                  type="button"
+                  className={budgetApp.theme === 'dark' ? 'is-active' : ''}
+                  onClick={() => budgetApp.theme !== 'dark' && budgetApp.toggleTheme()}
+                >
+                  Dark
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <form className="onboarding-form" onSubmit={handleSubmit}>
+          <div className="form-grid">
+            <label>
+              Email
+              <input
+                type="email"
+                name="email"
+                value={accountData.email}
+                onChange={handleChange}
+                placeholder="you@example.com"
+                required
+              />
+            </label>
+            <label>
+              Password
+              <input
+                type="password"
+                name="password"
+                value={accountData.password}
+                onChange={handleChange}
+                placeholder="Create a password"
+                minLength={6}
+                required
+              />
+            </label>
+          </div>
+
+          {budgetApp.authFeedback ? <p className="form-feedback">{budgetApp.authFeedback}</p> : null}
+
+          <div className="onboarding-actions">
+            <Button className="primary-button" type="submit">
+              Save account and continue
+            </Button>
+          </div>
         </form>
       </section>
     </div>
@@ -357,6 +567,8 @@ function SavingsGoalsPanel({ goals, savingsBalance, currency, onAddGoal }) {
 function SettingsView({ profile, theme, feedback, onSave, onToggleTheme, onReset }) {
   const [formData, setFormData] = useState({
     name: profile.name,
+    email: profile.email,
+    password: profile.password,
     currency: profile.currency,
     monthlyBudget: profile.monthlyBudget,
     passkey: profile.passkey,
@@ -386,6 +598,20 @@ function SettingsView({ profile, theme, feedback, onSave, onToggleTheme, onReset
           <label>
             Name
             <input name="name" value={formData.name} onChange={handleChange} />
+          </label>
+          <label>
+            Email
+            <input type="email" name="email" value={formData.email} onChange={handleChange} />
+          </label>
+          <label>
+            Password
+            <input
+              type="password"
+              minLength={6}
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
+            />
           </label>
           <label>
             Currency

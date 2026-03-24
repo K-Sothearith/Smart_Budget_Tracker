@@ -1,6 +1,6 @@
 import Sidebar from './Sidebar'
 
-function PageShell({ children, activeView, onChangeView, profile, theme, onToggleTheme, summary }) {
+function PageShell({ children, activeView, onChangeView, profile, theme, onToggleTheme, onSignOut, summary }) {
   return (
     <div className={`app-shell theme-${theme}`}>
       <Sidebar
@@ -9,6 +9,7 @@ function PageShell({ children, activeView, onChangeView, profile, theme, onToggl
         profile={profile}
         theme={theme}
         onToggleTheme={onToggleTheme}
+        onSignOut={onSignOut}
         summary={summary}
       />
       <main className="page-content">{children}</main>

@@ -16,6 +16,7 @@ const STORAGE_KEY = 'smart-budget-tracker.app'
 
 export function useBudgetApp() {
   const [appState, setAppState] = useLocalStorage(STORAGE_KEY, buildInitialAppState())
+  const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [activeView, setActiveView] = useState('overview')
   const [filters, setFilters] = useState({
     search: '',
@@ -27,6 +28,9 @@ export function useBudgetApp() {
   const [transactionFeedback, setTransactionFeedback] = useState('')
   const [settingsFeedback, setSettingsFeedback] = useState('')
   const [onboardingFeedback, setOnboardingFeedback] = useState('')
+  const [authFeedback, setAuthFeedback] = useState('')
+
+  const hasStoredCredentials = Boolean(appState.profile.email && appState.profile.password)
 
   useEffect(() => {
     document.documentElement.dataset.theme = appState.theme
@@ -106,8 +110,62 @@ export function useBudgetApp() {
     })
 
     setAppState(nextState)
+    setIsAuthenticated(true)
     setOnboardingFeedback('')
+    setAuthFeedback('')
     return { ok: true }
+  }
+
+  const signIn = (input) => {
+    const email = input.email?.trim().toLowerCase()
+    const password = input.password ?? ''
+
+    if (!email || !password) {
+      setAuthFeedback('Enter your email and password to continue.')
+      return { ok: false }
+    }
+
+    if (email !== appState.profile.email || password !== appState.profile.password) {
+      setAuthFeedback('Incorrect email or password.')
+      return { ok: false }
+    }
+
+    setIsAuthenticated(true)
+    setAuthFeedback('')
+    return { ok: true }
+  }
+
+  const completeAccountSetup = (input) => {
+    const email = input.email?.trim().toLowerCase()
+    const password = input.password ?? ''
+
+    if (!email) {
+      setAuthFeedback('Email is required to finish account setup.')
+      return { ok: false }
+    }
+
+    if (!password.trim() || password.trim().length < 6) {
+      setAuthFeedback('Password must be at least 6 characters.')
+      return { ok: false }
+    }
+
+    setAppState((prev) => ({
+      ...prev,
+      profile: {
+        ...prev.profile,
+        email,
+        password,
+      },
+    }))
+    setIsAuthenticated(true)
+    setAuthFeedback('')
+    return { ok: true }
+  }
+
+  const signOut = () => {
+    setIsAuthenticated(false)
+    setActiveView('overview')
+    setAuthFeedback('')
   }
 
   const updateFilter = (key, value) => {
@@ -136,6 +194,14 @@ export function useBudgetApp() {
       setSettingsFeedback('Name is required.')
       return
     }
+    if (!input.email.trim()) {
+      setSettingsFeedback('Email is required.')
+      return
+    }
+    if (!input.password.trim() || input.password.trim().length < 6) {
+      setSettingsFeedback('Password must be at least 6 characters.')
+      return
+    }
     if (!input.passkey.trim() || input.passkey.trim().length < 4) {
       setSettingsFeedback('Passkey must be at least 4 characters.')
       return
@@ -146,6 +212,8 @@ export function useBudgetApp() {
       profile: {
         ...prev.profile,
         name: input.name.trim(),
+        email: input.email.trim().toLowerCase(),
+        password: input.password,
         currency: input.currency,
         monthlyBudget: Number(input.monthlyBudget) || 0,
         passkey: input.passkey.trim(),
@@ -163,13 +231,18 @@ export function useBudgetApp() {
 
   const resetAllData = () => {
     setAppState(buildInitialAppState())
+    setIsAuthenticated(false)
     setActiveView('overview')
     setTransactionFeedback('')
     setSettingsFeedback('')
+    setOnboardingFeedback('')
+    setAuthFeedback('')
     setPendingAction(null)
   }
 
   return {
+    isAuthenticated,
+    hasStoredCredentials,
     activeView,
     setActiveView,
     filters,
@@ -180,10 +253,14 @@ export function useBudgetApp() {
     transactionFeedback,
     settingsFeedback,
     onboardingFeedback,
+    authFeedback,
     pendingAction,
     confirmPendingAction,
     cancelPendingAction,
     completeOnboarding,
+    completeAccountSetup,
+    signIn,
+    signOut,
     profile: appState.profile,
     theme: appState.theme,
     toggleTheme,

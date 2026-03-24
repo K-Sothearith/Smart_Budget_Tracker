@@ -7,6 +7,8 @@ export function buildInitialAppState(overrides = {}) {
     theme: overrides.theme || 'light',
     profile: {
       name: '',
+      email: '',
+      password: '',
       currency: 'USD',
       monthlyBudget: 0,
       initialBalance: 0,
@@ -87,6 +89,14 @@ export function validateOnboarding(input) {
     return { ok: false, message: 'Your name is required to finish onboarding.' }
   }
 
+  if (!input.email?.trim()) {
+    return { ok: false, message: 'Email is required to create your account.' }
+  }
+
+  if (!input.password?.trim() || input.password.trim().length < 6) {
+    return { ok: false, message: 'Password must be at least 6 characters.' }
+  }
+
   if (!input.passkey?.trim() || input.passkey.trim().length < 4) {
     return { ok: false, message: 'Passkey must be at least 4 characters.' }
   }
@@ -109,6 +119,8 @@ export function validateOnboarding(input) {
       theme: input.theme === 'dark' ? 'dark' : 'light',
       profile: {
         name: input.name.trim(),
+        email: input.email.trim().toLowerCase(),
+        password: input.password,
         currency: input.currency || 'USD',
         monthlyBudget,
         initialBalance,
