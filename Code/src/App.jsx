@@ -174,7 +174,7 @@ function AuthGate({ budgetApp, initialMode }) {
   return mode === 'signup' ? (
     <OnboardingFlow budgetApp={budgetApp} onSwitchToSignIn={() => setMode('signin')} />
   ) : (
-    <SignInFlow budgetApp={budgetApp} />
+    <SignInFlow budgetApp={budgetApp} onSwitchToSignUp={() => setMode('signup')} />
   )
 }
 
@@ -302,11 +302,11 @@ function OnboardingFlow({ budgetApp, onSwitchToSignIn }) {
           {budgetApp.onboardingFeedback ? <p className="form-feedback">{budgetApp.onboardingFeedback}</p> : null}
 
           <div className="onboarding-actions">
-            <Button className="primary-button" type="submit">
+            <Button className="primary-button primary-button--compact" type="submit">
               Launch budget dashboard
             </Button>
             <button type="button" className="auth-link" onClick={onSwitchToSignIn}>
-              Already Have an Account? SignIn
+              Already have an account? Sign in
             </button>
           </div>
         </form>
@@ -315,7 +315,7 @@ function OnboardingFlow({ budgetApp, onSwitchToSignIn }) {
   )
 }
 
-function SignInFlow({ budgetApp }) {
+function SignInFlow({ budgetApp, onSwitchToSignUp }) {
   const [credentials, setCredentials] = useState({
     email: '',
     password: '',
@@ -400,9 +400,15 @@ function SignInFlow({ budgetApp }) {
           {budgetApp.authFeedback ? <p className="form-feedback">{budgetApp.authFeedback}</p> : null}
 
           <div className="onboarding-actions">
-            <Button className="primary-button" type="submit">
+            <Button className="primary-button primary-button--compact" type="submit">
               Sign in
             </Button>
+            <button type="button" className="auth-link" style={{ marginTop: '-60px' }} onClick={onSwitchToSignUp}>
+              Doesn't have an account? Create one
+            </button>
+            <button type="button" className="auth-link" style={{ marginTop: '-90px' }} onClick={budgetApp.resetAllData}>
+              Clear local data
+            </button>
           </div>
         </form>
       </section>
