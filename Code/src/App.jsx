@@ -257,7 +257,7 @@ function OnboardingFlow({ budgetApp, onSwitchToSignIn }) {
                 name="age"
                 value={formData.age}
                 onChange={handleChange}
-                placeholder="21"
+                placeholder="69"
                 required
               />
             </label>
@@ -268,7 +268,7 @@ function OnboardingFlow({ budgetApp, onSwitchToSignIn }) {
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
-                placeholder="you@example.com"
+                placeholder="yourmom@example.com"
                 required
               />
             </label>
@@ -394,19 +394,18 @@ function SignInFlow({ budgetApp, onSwitchToSignUp }) {
                 minLength={6}
                 required
               />
+              {budgetApp.authFeedback ? <p className="form-feedback">{budgetApp.authFeedback}</p> : null}
             </label>
           </div>
-
-          {budgetApp.authFeedback ? <p className="form-feedback">{budgetApp.authFeedback}</p> : null}
 
           <div className="onboarding-actions">
             <Button className="primary-button primary-button--compact" type="submit">
               Sign in
             </Button>
-            <button type="button" className="auth-link" style={{ marginTop: '-60px' }} onClick={onSwitchToSignUp}>
+            <button type="button" className="auth-link" style={{ marginTop: '-3rem' }} onClick={onSwitchToSignUp}>
               Doesn't have an account? Create one
             </button>
-            <button type="button" className="auth-link" style={{ marginTop: '-90px' }} onClick={budgetApp.resetAllData}>
+            <button type="button" className="auth-link" style={{ marginTop: '-3rem' }} onClick={budgetApp.resetAllData}>
               Clear local data
             </button>
           </div>

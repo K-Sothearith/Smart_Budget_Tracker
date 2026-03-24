@@ -436,7 +436,7 @@ textarea {
 .onboarding-actions {
   display: grid;
   gap: 0.85rem;
-  margin-top: 0.5rem;
+  margin-top: 0.2rem;
 }
 
 .auth-link {
@@ -478,6 +478,10 @@ textarea {
 .form-feedback {
   color: var(--danger);
   margin: 0;
+}
+
+.onboarding-form .form-feedback {
+  margin-top: -0.35rem;
 }
 
 .goal-item {
