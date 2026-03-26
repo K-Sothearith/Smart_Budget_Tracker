@@ -15,6 +15,10 @@ export function useTransactions() {
     setTransactions((prev) => prev.filter((item) => item.id !== id))
   }
 
+  const resetTransactions = () => {
+    setTransactions([])
+  }
+
   const summary = useMemo(() => {
     const income = transactions
       .filter((item) => item.type === 'income')
@@ -30,6 +34,7 @@ export function useTransactions() {
     transactions,
     addTransaction,
     removeTransaction,
+    resetTransactions,
     summary,
   }
 }

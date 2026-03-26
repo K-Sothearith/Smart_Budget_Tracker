@@ -1,5 +1,13 @@
 export const DEFAULT_BUDGET = 0
 
+export function isValidPassword(password = '') {
+  return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d]).{6,}$/.test(password)
+}
+
+export function isValidPasskey(passkey = '') {
+  return /^\d{4,6}$/.test(passkey)
+}
+
 export function createTransaction(data = {}) {
   const now = new Date().toISOString()
   return {

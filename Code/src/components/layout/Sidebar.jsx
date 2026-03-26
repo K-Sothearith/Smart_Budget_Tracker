@@ -2,13 +2,13 @@ import { formatCurrency } from '../../utils/currency'
 
 const navItems = ['Overview', 'Charts', 'Records']
 
-function Sidebar({ theme, onToggleTheme, summary }) {
+function Sidebar({ theme, onToggleTheme, onSignOut, profile, summary }) {
   return (
     <aside className="sidebar">
       <div className="sidebar__brand">
         <p className="eyebrow">Smart Budget</p>
-        <h2>Budget dashboard</h2>
-        <p>UI imported from the design branch while the existing main-branch transaction logic stays intact.</p>
+        <h2>{profile.name}&apos;s dashboard</h2>
+        <p>Account access now lives on main while the transaction storage logic stays local and lightweight.</p>
       </div>
 
       <nav className="sidebar__nav">
@@ -32,6 +32,9 @@ function Sidebar({ theme, onToggleTheme, summary }) {
 
       <button type="button" className="theme-switch" onClick={onToggleTheme}>
         Switch to {theme === 'dark' ? 'light' : 'dark'} mode
+      </button>
+      <button type="button" className="secondary-button" onClick={onSignOut}>
+        Sign out
       </button>
     </aside>
   )
