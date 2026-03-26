@@ -220,6 +220,7 @@ img {
 .settings-actions {
   display: grid;
   gap: 1rem;
+  padding-top: 1rem;
 }
 
 .chart-card,
@@ -370,7 +371,17 @@ img {
 }
 
 .transaction-panel--full {
+  position: relative;
   min-height: 70vh;
+  padding-top: 13.5rem;
+}
+
+.transaction-panel--full .transaction-panel__controls {
+  position: absolute;
+  left: 1.4rem;
+  right: 1.4rem;
+  display: grid;
+  gap: 1rem;
 }
 
 .transaction-filters,
@@ -575,6 +586,14 @@ textarea {
   margin: 0;
 }
 
+.form-feedback--success {
+  color: var(--success);
+}
+
+.add-transaction__feedback {
+  margin-top: 0.75rem;
+}
+
 .onboarding-form .form-feedback {
   margin-top: -0.35rem;
 }
@@ -624,6 +643,10 @@ textarea {
   .form-grid,
   .inline-form {
     grid-template-columns: 1fr;
+  }
+
+  .transaction-panel--full {
+    padding-top: 18rem;
   }
 
   .sidebar {

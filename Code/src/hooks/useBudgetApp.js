@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useLocalStorage } from './useLocalStorage'
-import { categories } from '../data/categories'
+import { categories, categoriesByType } from '../data/categories'
 import {
   buildInitialAppState,
   createSavingsGoal,
@@ -272,6 +272,7 @@ export function useBudgetApp() {
     toggleTheme,
     summary,
     categories,
+    categoriesByType,
     savingsGoals: appState.savingsGoals,
     addSavingsGoal,
     updateSettings,

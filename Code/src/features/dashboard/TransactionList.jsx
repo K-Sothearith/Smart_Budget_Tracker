@@ -12,19 +12,21 @@ function TransactionList({
 }) {
   return (
     <Card className={`transaction-panel ${fullWidth ? 'transaction-panel--full' : ''}`}>
-      <div className="section-heading">
-        <div>
-          <h2>Transactions</h2>
-          <p>Filtered, view-only history with every record type.</p>
+      <div className="transaction-panel__controls">
+        <div className="section-heading">
+          <div>
+            <h2 style={{ paddingTop: "1.5rem" }}>Transactions</h2>
+            <p>Filtered, view-only history with every record type.</p>
+          </div>
         </div>
-      </div>
 
-      <TransactionFilters
-        filters={filters}
-        onFilterChange={onFilterChange}
-        onClearFilters={onClearFilters}
-        categories={categories}
-      />
+        <TransactionFilters
+          filters={filters}
+          onFilterChange={onFilterChange}
+          onClearFilters={onClearFilters}
+          categories={categories}
+        />
+      </div>
 
       <ul className="transaction-list">
         {transactions.length ? (

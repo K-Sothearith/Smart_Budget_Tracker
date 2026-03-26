@@ -36,7 +36,7 @@ function SavingsGoalsPanel({ goals, savingsBalance, currency, onAddGoal }) {
           value={goalForm.target}
           onChange={(event) => setGoalForm((prev) => ({ ...prev, target: event.target.value }))}
         />
-        <Button className="primary-button" type="submit">
+        <Button className="primary-button" type="submit" style={{ width: "100%" }}>
           Add goal
         </Button>
       </form>

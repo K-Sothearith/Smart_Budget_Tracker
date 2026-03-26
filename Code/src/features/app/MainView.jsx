@@ -30,13 +30,13 @@ function MainView({ budgetApp }) {
           <div>
             <p className="eyebrow">Create Record</p>
             <h1>Add a transaction</h1>
-            <p>Income, expense, add savings, and use savings all feed the same real balance model.</p>
+            <p>Add record for your income, expense, add-saving, and use-saving here</p>
           </div>
         </header>
         <AddTransactionForm
           onSubmit={submitTransaction}
           feedback={transactionFeedback}
-          categories={budgetApp.categories}
+          categoriesByType={budgetApp.categoriesByType}
         />
       </section>
     )
@@ -49,7 +49,7 @@ function MainView({ budgetApp }) {
           <div>
             <p className="eyebrow">Records</p>
             <h1>Transaction history</h1>
-            <p>Filters are live, and the list stays view-only exactly as requested.</p>
+            <p>These are what you've spent so far</p>
           </div>
         </header>
         <TransactionList
@@ -71,14 +71,14 @@ function MainView({ budgetApp }) {
           <div>
             <p className="eyebrow">Savings</p>
             <h1>Savings goals and transfers</h1>
-            <p>Progress uses your current savings balance, while transfers stay recorded in the transaction history.</p>
+            <p>Wanting an item and not having enough money? Start saving for it now</p>
           </div>
         </header>
         <div className="content-grid">
           <Card className="spotlight-card">
             <span className="metric-label">Savings balance</span>
             <strong>{formatCurrency(summary.savingsBalance, profile.currency)}</strong>
-            <p>{summary.goalCount} active goals tracked with localStorage persistence.</p>
+            <p>{summary.goalCount} active goals</p>
           </Card>
           <SavingsGoalsPanel
             goals={budgetApp.savingsGoals}

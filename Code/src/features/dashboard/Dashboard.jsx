@@ -32,7 +32,8 @@ function Dashboard({
 
       {feedback ? (
         <Card className="feedback-card">
-          <p>{feedback}</p>
+          <p className="eyebrow">Recent Activity</p>
+          <p>{feedback.toUpperCase()}</p>
         </Card>
       ) : null}
 

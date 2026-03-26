@@ -8,17 +8,29 @@ const noteHints = {
   use_savings: 'Why are you using savings?',
 }
 
-function AddTransactionForm({ onSubmit, feedback, categories }) {
+function AddTransactionForm({ onSubmit, feedback, categoriesByType }) {
+  const fallbackCategories = categoriesByType?.expense ?? []
   const [formData, setFormData] = useState({
     amount: '',
     type: 'expense',
-    category: 'Food',
+    category: fallbackCategories[0] ?? '',
     date: new Date().toISOString().slice(0, 10),
     note: '',
   })
 
+  const availableCategories = categoriesByType?.[formData.type] ?? fallbackCategories
+
   const handleChange = (event) => {
     const { name, value } = event.target
+    if (name === 'type') {
+      const nextCategories = categoriesByType?.[value] ?? fallbackCategories
+      setFormData((prev) => ({
+        ...prev,
+        type: value,
+        category: nextCategories.includes(prev.category) ? prev.category : nextCategories[0] ?? '',
+      }))
+      return
+    }
     setFormData((prev) => ({ ...prev, [name]: value }))
   }
 
@@ -56,7 +68,7 @@ function AddTransactionForm({ onSubmit, feedback, categories }) {
           <label>
             Category
             <select name="category" value={formData.category} onChange={handleChange}>
-              {categories.map((category) => (
+              {availableCategories.map((category) => (
                 <option key={category} value={category}>
                   {category}
                 </option>
@@ -79,9 +91,13 @@ function AddTransactionForm({ onSubmit, feedback, categories }) {
           </label>
         </div>
 
-        {feedback ? <p className="form-feedback">{feedback}</p> : null}
+        {feedback ? (
+          <p className="form-feedback form-feedback--success add-transaction__feedback">
+            {feedback.toUpperCase()}
+          </p>
+        ) : null}
 
-        <Button className="primary-button" type="submit">
+        <Button className="primary-button" type="submit" style={{ height: "4rem", marginTop: "1.5rem" }}>
           Save record
         </Button>
       </form>

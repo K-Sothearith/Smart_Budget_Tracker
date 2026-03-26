@@ -39,11 +39,11 @@ function PasskeyModal({ pendingAction, onCancel, onConfirm }) {
             />
           </label>
           {pendingAction.error ? <p className="form-feedback">{pendingAction.error}</p> : null}
-          <div className="modal-actions">
+          <div className="modal-actions" style={{ marginTop: "1rem" }}>
             <Button className="secondary-button" type="button" onClick={handleClose}>
               Cancel
             </Button>
-            <Button className="primary-button" type="submit">
+            <Button className="primary-button" type="submit" style={{ height: "4rem" }}>
               Confirm
             </Button>
           </div>

@@ -3,7 +3,7 @@ import { formatCurrency } from '../../utils/currency'
 const navItems = [
   { id: 'overview', label: 'Overview' },
   { id: 'add', label: 'Add Record' },
-  { id: 'transactions', label: 'Transactions' },
+  { id: 'transactions', label: 'Transaction History' },
   { id: 'savings', label: 'Savings' },
   { id: 'settings', label: 'Settings' },
 ]
@@ -44,7 +44,7 @@ function Sidebar({ activeView, onChangeView, profile, theme, onToggleTheme, onSi
       <button type="button" className="theme-switch" onClick={onToggleTheme}>
         Switch to {theme === 'dark' ? 'light' : 'dark'} mode
       </button>
-      <button type="button" className="secondary-button" onClick={onSignOut}>
+      <button type="button" className="secondary-button" onClick={onSignOut} style={{ color: "white" }}>
         Sign out
       </button>
     </aside>
