@@ -1,13 +1,15 @@
 import ProgressBar from '../../components/ui/ProgressBar'
 import Card from '../../components/ui/Card'
+import { formatCurrency } from '../../utils/currency'
 
-function SavingsCard({ saved = 0, goal = 0 }) {
+function SavingsCard({ summary }) {
   return (
-    <Card className="savings-card">
-      <h3>Savings Goal</h3>
-      <ProgressBar value={saved} max={goal || 1} />
+    <Card className="metric-card metric-card--savings">
+      <span className="metric-label">Records tracked</span>
+      <strong>{summary.transactionCount}</strong>
+      <ProgressBar value={summary.expense} max={summary.income || 1} />
       <p>
-        Saved {saved} / {goal}
+        Expense coverage at {formatCurrency(summary.expense)} against {formatCurrency(summary.income)} income
       </p>
     </Card>
   )
