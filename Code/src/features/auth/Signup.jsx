@@ -75,7 +75,7 @@ function Signup({ authApp, onSwitchToSignIn }) {
               pattern="\d{4,6}"
               minLength={4}
               maxLength={6}
-              title="Passkey must be 4 to 6 digits only"
+              title="Passkey must be 4 to 6 digits only, and contains only numbers"
               required
             />
           </label>

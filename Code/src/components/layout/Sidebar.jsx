@@ -8,7 +8,7 @@ function Sidebar({ theme, onToggleTheme, onSignOut, profile, summary }) {
       <div className="sidebar__brand">
         <p className="eyebrow">Smart Budget</p>
         <h2>{profile.name}&apos;s dashboard</h2>
-        <p>Account access now lives on main while the transaction storage logic stays local and lightweight.</p>
+        <p>Monthly control with savings transfers and passkey confirmation.</p>
       </div>
 
       <nav className="sidebar__nav">
