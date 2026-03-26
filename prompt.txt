@@ -1,9 +1,0 @@
-*Attach file
-Can you go through all of the codes in this Java project? I'm planning to make another project for
-my Frontend Development Course with a similar concept(listed in the attached file). I want you to
-remember the procedures of each services and then use it to create a functional interactive web-application (no deployment).
-I'll switch this folder to my Frontend project folder once you're done.
-
-Make sure to use the current folder-file structure (in "/code/") as a base,
-if it's necessary or hard to use the current structure, you can make changes to it.
-List everything you're unclear about before starting, I'll answer
