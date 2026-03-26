@@ -7,6 +7,8 @@ import {
   createTransaction,
   deriveSummary,
   getCurrentMonth,
+  isValidPasskey,
+  isValidPassword,
   isSensitiveType,
   validateOnboarding,
   validateTransaction,
@@ -144,8 +146,10 @@ export function useBudgetApp() {
       return { ok: false }
     }
 
-    if (!password.trim() || password.trim().length < 6) {
-      setAuthFeedback('Password must be at least 6 characters.')
+    if (!isValidPassword(password)) {
+      setAuthFeedback(
+        'Password must be at least 6 characters and include an uppercase letter, lowercase letter, number, and special character.',
+      )
       return { ok: false }
     }
 
@@ -198,12 +202,14 @@ export function useBudgetApp() {
       setSettingsFeedback('Email is required.')
       return
     }
-    if (!input.password.trim() || input.password.trim().length < 6) {
-      setSettingsFeedback('Password must be at least 6 characters.')
+    if (!isValidPassword(input.password)) {
+      setSettingsFeedback(
+        'Password must be at least 6 characters and include an uppercase letter, lowercase letter, number, and special character.',
+      )
       return
     }
-    if (!input.passkey.trim() || input.passkey.trim().length < 4) {
-      setSettingsFeedback('Passkey must be at least 4 characters.')
+    if (!isValidPasskey(input.passkey)) {
+      setSettingsFeedback('Passkey must be 4 to 6 digits and contain numbers only.')
       return
     }
 

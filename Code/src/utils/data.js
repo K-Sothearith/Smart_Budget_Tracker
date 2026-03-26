@@ -46,6 +46,14 @@ export function isSensitiveType(type) {
   return type === 'expense' || type === 'use_savings'
 }
 
+export function isValidPassword(password = '') {
+  return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d]).{6,}$/.test(password)
+}
+
+export function isValidPasskey(passkey = '') {
+  return /^\d{4,6}$/.test(passkey)
+}
+
 export function validateTransaction(input, currentBalance, currentSavings) {
   const amount = Number(input.amount)
   const value = {
@@ -93,12 +101,16 @@ export function validateOnboarding(input) {
     return { ok: false, message: 'Email is required to create your account.' }
   }
 
-  if (!input.password?.trim() || input.password.trim().length < 6) {
-    return { ok: false, message: 'Password must be at least 6 characters.' }
+  if (!isValidPassword(input.password)) {
+    return {
+      ok: false,
+      message:
+        'Password must be at least 6 characters and include an uppercase letter, lowercase letter, number, and special character.',
+    }
   }
 
-  if (!input.passkey?.trim() || input.passkey.trim().length < 4) {
-    return { ok: false, message: 'Passkey must be at least 4 characters.' }
+  if (!isValidPasskey(input.passkey)) {
+    return { ok: false, message: 'Passkey must be 4 to 6 digits and contain numbers only.' }
   }
 
   if (!Number.isFinite(monthlyBudget) || monthlyBudget < 0) {
