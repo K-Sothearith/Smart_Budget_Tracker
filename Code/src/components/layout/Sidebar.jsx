@@ -1,16 +1,24 @@
 import { formatCurrency } from '../../utils/currency'
+import { navItems } from './navItems'
 
-const navItems = [
-  { id: 'overview', label: 'Overview' },
-  { id: 'add', label: 'Add Record' },
-  { id: 'transactions', label: 'Transaction History' },
-  { id: 'savings', label: 'Savings' },
-  { id: 'settings', label: 'Settings' },
-]
+function Sidebar({
+  activeView,
+  onChangeView,
+  profile,
+  theme,
+  onToggleTheme,
+  onSignOut,
+  summary,
+  isMobileMenuOpen = false,
+  onCloseMobileMenu,
+}) {
+  const handleNavigate = (view) => {
+    onChangeView(view)
+    onCloseMobileMenu?.()
+  }
 
-function Sidebar({ activeView, onChangeView, profile, theme, onToggleTheme, onSignOut, summary }) {
   return (
-    <aside className="sidebar">
+    <aside className={`sidebar ${isMobileMenuOpen ? 'is-mobile-open' : ''}`}>
       <div className="sidebar__brand">
         <p className="eyebrow">Smart Budget</p>
         <h2>{profile.name}&apos;s tracker</h2>
@@ -23,7 +31,7 @@ function Sidebar({ activeView, onChangeView, profile, theme, onToggleTheme, onSi
             key={item.id}
             type="button"
             className={`sidebar__link ${activeView === item.id ? 'is-active' : ''}`}
-            onClick={() => onChangeView(item.id)}
+            onClick={() => handleNavigate(item.id)}
           >
             {item.label}
           </button>
