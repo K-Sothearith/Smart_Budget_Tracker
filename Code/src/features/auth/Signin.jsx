@@ -62,7 +62,7 @@ function Signin({ budgetApp, onSwitchToSignUp }) {
           <Button className="primary-button primary-button--compact" type="submit">
             Sign in
           </Button>
-          <button type="button" className="auth-link" style={{ marginTop: '-3rem' }} onClick={onSwitchToSignUp}>
+          <button type="button" className="auth-link" style={{ marginTop: '-1rem' }} onClick={onSwitchToSignUp}>
             Doesn't have an account? Create one
           </button>
           <button type="button" className="auth-link" style={{ marginTop: '-3rem' }} onClick={budgetApp.resetAllData}>
